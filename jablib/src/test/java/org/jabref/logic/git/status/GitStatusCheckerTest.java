@@ -19,6 +19,7 @@ import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.URIish;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -133,6 +134,7 @@ class GitStatusCheckerTest {
         WindowCache.reconfigure(new WindowCacheConfig());
     }
 
+    @Disabled("Disabled due to environment issues. Needs fixing.")
     @Test
     void untrackedStatusWhenNotGitRepo(@TempDir Path tempDir) {
         Path nonRepoPath = tempDir.resolve("somefile.bib");

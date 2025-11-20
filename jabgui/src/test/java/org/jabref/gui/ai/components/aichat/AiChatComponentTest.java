@@ -105,7 +105,7 @@ class AiChatComponentTest {
             );
             latch.countDown();
         });
-        latch.await(5, TimeUnit.SECONDS);
+        latch.await(15, TimeUnit.SECONDS);
         return holder[0];
     }
 

@@ -4,6 +4,7 @@ import dev.jbang.gradle.tasks.JBangTask
 import net.ltgt.gradle.errorprone.errorprone
 import net.ltgt.gradle.nullaway.nullaway
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.net.URI
 import java.util.*
 
@@ -12,6 +13,8 @@ plugins {
     id("java-library")
 
     id("antlr")
+
+    id("jacoco")
 
     id("me.champeau.jmh") version "0.7.3"
 
@@ -236,11 +239,11 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core")
     errorprone("com.uber.nullaway:nullaway")
 }
-/*
+
 jacoco {
     toolVersion = "0.8.13"
 }
- */
+
 
 tasks.generateGrammarSource {
     maxHeapSize = "64m"
@@ -485,37 +488,43 @@ tasks.register<Test>("databaseTest") {
     maxParallelForks = 1
 }
 
-/*
-tasks.register('jacocoPrepare') {
+// Bloco de configuração/definição de Tasks
+val jacocoPrepare = tasks.register("jacocoPrepare") {
     doFirst {
-        // Ignore failures of tests
-        tasks.withType(Test).tap {
-            configureEach {
-                ignoreFailures = true
-            }
+        // Ignore failures of tests (necessário para que a cobertura seja gerada mesmo com testes falhando)
+        tasks.withType<Test>().configureEach {
+            ignoreFailures = true
         }
     }
 }
-test.mustRunAfter jacocoPrepare
-databaseTest.mustRunAfter jacocoPrepare
-fetcherTest.mustRunAfter jacocoPrepare
+tasks.named<Test>("test").configure { mustRunAfter(jacocoPrepare) }
+tasks.named<Test>("databaseTest").configure { mustRunAfter(jacocoPrepare) }
+tasks.named<Test>("fetcherTest").configure { mustRunAfter(jacocoPrepare) }
 
-jacocoTestReport {
-    dependsOn jacocoPrepare, test, fetcherTest, databaseTest
+// Configuração da Task de Relatório
+tasks.named<JacocoReport>("jacocoTestReport") {
+    // Dependências: Referencia a variável jacocoPrepare e as tasks de teste
+    dependsOn(
+        jacocoPrepare,
+        tasks.named("test"),
+        tasks.named("fetcherTest"),
+        tasks.named("databaseTest")
+    )
 
-    executionData files(
-            layout.buildDirectory.file('jacoco/test.exec').get().asFile,
-            layout.buildDirectory.file('jacoco/fetcherTest.exec').get().asFile,
-            layout.buildDirectory.file('jacoco/databaseTest.exec').get().asFile)
+    // Configuração dos dados de execução (executionData)
+    executionData.setFrom(
+        layout.buildDirectory.file("jacoco/test.exec").get().asFile,
+        layout.buildDirectory.file("jacoco/fetcherTest.exec").get().asFile,
+        layout.buildDirectory.file("jacoco/databaseTest.exec").get().asFile
+    )
 
+    // Configuração dos relatórios
     reports {
-        csv.required = true
-        html.required = true
-        // coveralls plugin depends on xml format report
-        xml.required = true
+        csv.required.set(true)
+        html.required.set(true)
+        xml.required.set(true)
     }
 }
-*/
 
 mavenPublishing {
   configure(JavaLibrary(
