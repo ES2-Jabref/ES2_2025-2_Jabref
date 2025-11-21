@@ -26,13 +26,15 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Configurar JVM para Headless Mode (Apenas Linux)
+      - name: 📺 Configurar Xvfb para testes GUI (Apenas Linux)
         if: runner.os == 'Linux'
-        run: echo "_JAVA_OPTIONS=-Djava.awt.headless=true" >> $GITHUB_ENV
+        uses: GabrielBB/xvfb-action@v1.0
+        with:
+          run-args: '-screen 0 1280x960x24'
 
       - name: Tornar gradlew executável (Apenas Linux)
         if: runner.os == 'Linux'
         run: chmod +x gradlew
 
       - name: Executar Build e Testes com Gradle em ${{ matrix.os }}
-        run: ./gradlew build
+        run: ./gradlew build --continue
