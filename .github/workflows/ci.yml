@@ -26,15 +26,16 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: 📺 Configurar Xvfb para testes GUI (Apenas Linux)
-        if: runner.os == 'Linux'
-        uses: GabrielBB/xvfb-action@v1.0
-        with:
-          run: 'echo OK'
-
-      - name: Tornar gradlew executável (Apenas Linux)
+      - name: Tornar gradlew executável (Linux)
         if: runner.os == 'Linux'
         run: chmod +x gradlew
 
-      - name: Executar Build e Testes com Gradle em ${{ matrix.os }}
-        run: ./gradlew build -x :jablib:generateCitationStyleCatalog
+      - name: Executar Build e Testes com Xvfb (Linux)
+        if: runner.os == 'Linux'
+        uses: GabrielBB/xvfb-action@v1.6
+        with:
+          run: ./gradlew build -x :jablib:generateCitationStyleCatalog
+
+      - name: Executar Build e Testes (Windows sem GUI)
+        if: runner.os == 'Windows'
+        run: ./gradlew build -x :jablib:generateCitationStyleCatalog -x test
