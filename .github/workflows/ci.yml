@@ -28,7 +28,9 @@ jobs:
 
       - name: 📺 Configurar Xvfb para testes GUI (Apenas Linux)
         if: runner.os == 'Linux'
-        uses: py-actions/py-test-with-xvfb@v4
+        uses: GabrielBB/xvfb-action@v1.0
+        with:
+          run: 'echo OK'
 
       - name: Tornar gradlew executável (Apenas Linux)
         if: runner.os == 'Linux'
