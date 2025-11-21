@@ -28,13 +28,11 @@ jobs:
 
       - name: 📺 Configurar Xvfb para testes GUI (Apenas Linux)
         if: runner.os == 'Linux'
-        uses: GabrielBB/xvfb-action@v1.0
-        with:
-          run: '-screen 0 1280x960x24'
+        uses: py-actions/py-test-with-xvfb@v4
 
       - name: Tornar gradlew executável (Apenas Linux)
         if: runner.os == 'Linux'
         run: chmod +x gradlew
 
       - name: Executar Build e Testes com Gradle em ${{ matrix.os }}
-        run: ./gradlew build --continue
+        run: ./gradlew build -x :jablib:generateCitationStyleCatalog
