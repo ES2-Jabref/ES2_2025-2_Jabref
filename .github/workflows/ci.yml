@@ -26,6 +26,10 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Configurar JVM para Headless Mode (Apenas Linux)
+        if: runner.os == 'Linux'
+        run: echo "_JAVA_OPTIONS=-Djava.awt.headless=true" >> $GITHUB_ENV
+
       - name: Tornar gradlew executável (Apenas Linux)
         if: runner.os == 'Linux'
         run: chmod +x gradlew
