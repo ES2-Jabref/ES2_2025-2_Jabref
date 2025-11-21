@@ -1,5 +1,4 @@
 name: CI Multi-OS com Java e Gradle
-
 on:
   push:
     branches: [ main ]
