@@ -69,8 +69,9 @@ tasks.cyclonedxBom {
 }
 
 sonar {
-  properties {
-    property "sonar.projectKey", "ES2-Jabref_ES2_2025-2_Jabref"
-    property "sonar.organization", "es2-jabref"
-  }
+    properties {
+        property("sonar.projectKey", "ES2-Jabref_ES2_2025-2_Jabref")
+        property("sonar.organization", "es2-jabref")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
 }
