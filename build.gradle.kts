@@ -4,7 +4,7 @@ plugins {
     id("org.openrewrite.rewrite") version "7.20.0"
     id("org.itsallcode.openfasttrace") version "3.1.0"
     id("org.cyclonedx.bom") version "3.0.1"
-    id ("org.sonarqube") version "7.1.0.6387"
+    id("org.sonarqube") version "7.1.0.6387"
 }
 
 // OpenRewrite should rewrite all sources
@@ -70,7 +70,7 @@ tasks.cyclonedxBom {
 
 sonar {
   properties {
-    property "sonar.projectKey", "ES2-Jabref_ES2_2025-2_Jabref"
-    property "sonar.organization", "es2-jabref"
+    property("sonar.projectKey", "ES2-Jabref_ES2_2025-2_Jabref")
+    property("sonar.organization", "es2-jabref")
   }
 }
